@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Play your producer tag on every git push",
   "bin": {
-    "pushingtag": "./bin/pushingtag.js"
+    "pushingtag": "bin/pushingtag.js"
   },
   "scripts": {
     "test": "jest",
@@ -39,7 +39,7 @@
   "author": "Muhammad Balawal Safdar",
   "repository": {
     "type": "git",
-    "url": "https://github.com/muhammadbalawal/pushingtag.git"
+    "url": "git+https://github.com/muhammadbalawal/pushingtag.git"
   },
   "bugs": {
     "url": "https://github.com/muhammadbalawal/pushingtag/issues"
