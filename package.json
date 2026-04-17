@@ -1,0 +1,26 @@
+{
+  "name": "pushingtag",
+  "version": "1.0.0",
+  "description": "Play your producer tag on every git push",
+  "bin": {
+    "pushingtag": "./bin/pushingtag.js"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "play-sound": "^1.1.5"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "hook"
+  ]
+}
