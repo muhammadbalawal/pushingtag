@@ -6,7 +6,10 @@
     "pushingtag": "./bin/pushingtag.js"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "release:patch": "npm test && npm version patch && git push --follow-tags && npm publish",
+    "release:minor": "npm test && npm version minor && git push --follow-tags && npm publish",
+    "release:major": "npm test && npm version major && git push --follow-tags && npm publish"
   },
   "dependencies": {
     "commander": "^12.0.0",
@@ -21,6 +24,25 @@
   "files": [
     "bin",
     "lib",
-    "hook"
-  ]
+    "PushingTag.png"
+  ],
+  "keywords": [
+    "git",
+    "push",
+    "producer",
+    "tag",
+    "audio",
+    "music",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "Muhammad Balawal Safdar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muhammadbalawal/pushingtag.git"
+  },
+  "bugs": {
+    "url": "https://github.com/muhammadbalawal/pushingtag/issues"
+  },
+  "homepage": "https://github.com/muhammadbalawal/pushingtag#readme"
 }
