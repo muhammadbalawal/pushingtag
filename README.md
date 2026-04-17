@@ -9,7 +9,6 @@ $ git push origin main
 
 [plays your tag.mp3]
 ```
-
 ---
 
 ## Install
