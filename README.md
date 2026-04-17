@@ -6,7 +6,7 @@ Play your producer tag every time you `git push`.
 
 ```
 $ git push origin main
-...
+
 [plays your tag.mp3]
 ```
 
