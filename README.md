@@ -1,7 +1,5 @@
-# PUSHING TAG
-
 <p align="center">
-  <img src="PushingTag.png" alt="pushingtag logo" width="400" />
+  <img src="PushingTag.png" alt="pushingtag logo" width="600" />
 </p>
 
 Play your producer tag every time you `git push`.
