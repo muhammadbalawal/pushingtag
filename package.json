@@ -1,6 +1,6 @@
 {
   "name": "pushingtag",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Play your producer tag on every git push",
   "bin": {
     "pushingtag": "bin/pushingtag.js"
