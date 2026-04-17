@@ -3,41 +3,28 @@
 jest.mock('fs');
 jest.mock('child_process');
 
-const fs = require('fs');
-const { execFileSync } = require('child_process');
-
+let fs;
+let execFileSync;
 let setup;
 
 beforeEach(() => {
-  jest.clearAllMocks();
-  fs.existsSync.mockReturnValue(false);
+  jest.resetModules();
+  fs = require('fs');
+  ({ execFileSync } = require('child_process'));
   fs.mkdirSync.mockImplementation(() => {});
-  fs.copyFileSync.mockImplementation(() => {});
-  fs.chmodSync.mockImplementation(() => {});
+  fs.existsSync.mockReturnValue(false);
   fs.writeFileSync.mockImplementation(() => {});
-  execFileSync.mockImplementation(() => {});
+  fs.appendFileSync.mockImplementation(() => {});
+  fs.readFileSync.mockReturnValue('');
+  execFileSync.mockImplementation(() => Buffer.from('/usr/local/bin/pushingtag'));
   setup = require('../../lib/commands/setup');
 });
 
-it('creates hook directory', () => {
+it('creates config directory', () => {
   setup();
   expect(fs.mkdirSync).toHaveBeenCalledWith(
-    expect.stringContaining('hooks'),
+    expect.stringContaining('.pushingtag'),
     { recursive: true }
-  );
-});
-
-it('copies the post-push hook and makes it executable', () => {
-  setup();
-  expect(fs.copyFileSync).toHaveBeenCalled();
-  expect(fs.chmodSync).toHaveBeenCalledWith(expect.stringContaining('post-push'), '755');
-});
-
-it('sets git global core.hooksPath', () => {
-  setup();
-  expect(execFileSync).toHaveBeenCalledWith(
-    'git',
-    expect.arrayContaining(['config', '--global', 'core.hooksPath'])
   );
 });
 
@@ -50,10 +37,27 @@ it('writes default config.json if it does not exist', () => {
 });
 
 it('does not overwrite config.json if it already exists', () => {
-  fs.existsSync.mockImplementation((p) => p.includes('config.json'));
+  fs.existsSync.mockImplementation(p => p.includes('config.json'));
   setup();
   expect(fs.writeFileSync).not.toHaveBeenCalledWith(
     expect.stringContaining('config.json'),
     expect.anything()
   );
+});
+
+it('appends shell wrapper to rc file', () => {
+  fs.existsSync.mockReturnValue(true);
+  fs.readFileSync.mockReturnValue('');
+  setup();
+  expect(fs.appendFileSync).toHaveBeenCalledWith(
+    expect.stringMatching(/\.(zshrc|bashrc|bash_profile)/),
+    expect.stringContaining('pushingtag-start')
+  );
+});
+
+it('skips rc file if wrapper already installed', () => {
+  fs.existsSync.mockReturnValue(true);
+  fs.readFileSync.mockReturnValue('# pushingtag-start');
+  setup();
+  expect(fs.appendFileSync).not.toHaveBeenCalled();
 });
