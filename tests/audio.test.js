@@ -1,7 +1,7 @@
 'use strict';
 
-jest.mock('play-sound', () => () => ({
-  play: jest.fn((file, cb) => cb(null))
+jest.mock('sound-play', () => ({
+  play: jest.fn(() => Promise.resolve())
 }));
 
 jest.mock('fs');
