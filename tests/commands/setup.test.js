@@ -61,3 +61,46 @@ it('skips rc file if wrapper already installed', () => {
   setup();
   expect(fs.appendFileSync).not.toHaveBeenCalled();
 });
+
+describe('powershell wrapper', () => {
+  beforeEach(() => {
+    jest.resetModules();
+    jest.doMock('../../lib/shell', () => {
+      const actual = jest.requireActual('../../lib/shell');
+      return {
+        ...actual,
+        getShellTargets: () => [
+          { path: '/fake/profile.ps1', type: 'powershell' },
+        ],
+      };
+    });
+    fs = require('fs');
+    ({ execFileSync } = require('child_process'));
+    fs.mkdirSync.mockImplementation(() => {});
+    fs.existsSync.mockReturnValue(false);
+    fs.writeFileSync.mockImplementation(() => {});
+    fs.appendFileSync.mockImplementation(() => {});
+    fs.readFileSync.mockReturnValue('');
+    execFileSync.mockImplementation(() => 'C:\\path\\pushingtag.cmd');
+    setup = require('../../lib/commands/setup');
+  });
+
+  it('creates the powershell profile file if it does not exist', () => {
+    setup();
+    expect(fs.writeFileSync).toHaveBeenCalledWith('/fake/profile.ps1', '');
+  });
+
+  it('appends a powershell-syntax wrapper', () => {
+    setup();
+    expect(fs.appendFileSync).toHaveBeenCalledWith(
+      '/fake/profile.ps1',
+      expect.stringContaining('function global:git')
+    );
+  });
+
+  it('embeds the resolved pushingtag binary path in the wrapper', () => {
+    setup();
+    const appended = fs.appendFileSync.mock.calls[0][1];
+    expect(appended).toContain('C:\\path\\pushingtag.cmd');
+  });
+});
